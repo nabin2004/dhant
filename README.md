@@ -40,6 +40,12 @@ pip install -e .[dev]
 pip install -e .[monitoring]
 ```
 
+### Install adapter extras (Quantization, LoRA, QLoRA)
+
+```bash
+pip install -e .[adapters]
+```
+
 ## Quick Start
 
 ### Python API
@@ -98,6 +104,26 @@ Disable TensorBoard for a run:
 dhant dpo --model Qwen/Qwen2.5-0.5B-Instruct --dataset argilla/Capybara-Preferences --disable_tensorboard
 ```
 
+Use quantization, LoRA, or QLoRA boilerplates:
+
+```bash
+dhant sft --model Qwen/Qwen2.5-0.5B --dataset trl-lib/Capybara --quantization 4bit
+dhant sft --model Qwen/Qwen2.5-0.5B --dataset trl-lib/Capybara --use_lora --lora_target_modules q_proj v_proj
+dhant sft --model Qwen/Qwen2.5-0.5B --dataset trl-lib/Capybara --use_qlora
+```
+
+## Adapter Boilerplates
+
+`dhant` includes reusable boilerplate configs for parameter-efficient and memory-efficient tuning:
+
+- `QuantizationConfigBoilerplate`
+- `LoRAConfigBoilerplate`
+- `QLoRAConfigBoilerplate`
+
+These configs can be passed to trainers from Python and are also supported from CLI flags.
+
+See `adapters.md` for full examples and validation rules.
+
 ## Monitoring and Logging
 
 Each training run now gets an isolated experiment folder with logs, artifacts, and TensorBoard files:
@@ -146,6 +172,7 @@ src/dhant/
 	scripts/
 		quickstart.py
 	trainer/
+		adapters.py
 		base.py
 		sft_config.py
 		sft_trainer.py

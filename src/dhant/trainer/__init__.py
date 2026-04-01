@@ -13,6 +13,14 @@ from dhant.trainer.grpo_config import GRPOConfig
 from dhant.trainer.reward_trainer import RewardTrainer
 from dhant.trainer.reward_config import RewardConfig
 from dhant.trainer.base import BaseTrainer, ExperimentPaths, TrainingExecutionError, TrainingResult
+from dhant.trainer.adapters import (
+    AdapterConfigurationError,
+    LoRAConfigBoilerplate,
+    QLoRAConfigBoilerplate,
+    QuantizationConfigBoilerplate,
+    apply_lora_if_available,
+    prepare_model_for_qlora_if_available,
+)
 
 __all__ = [
     "SFTTrainer",
@@ -27,4 +35,10 @@ __all__ = [
     "ExperimentPaths",
     "TrainingExecutionError",
     "TrainingResult",
+    "AdapterConfigurationError",
+    "QuantizationConfigBoilerplate",
+    "LoRAConfigBoilerplate",
+    "QLoRAConfigBoilerplate",
+    "apply_lora_if_available",
+    "prepare_model_for_qlora_if_available",
 ]

@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
+from dhant.trainer.adapters import validate_adapter_combo
+
 
 @dataclass(slots=True)
 class ExperimentPaths:
@@ -56,6 +58,15 @@ class BaseTrainer:
         self.experiment_name = str(self.extra_kwargs.pop("experiment_name", self.algorithm))
         self.enable_tensorboard = bool(self.extra_kwargs.pop("enable_tensorboard", True))
         self.log_level = str(self.extra_kwargs.pop("log_level", "INFO")).upper()
+        self.quantization_config = self.extra_kwargs.pop("quantization_config", None)
+        self.lora_config = self.extra_kwargs.pop("lora_config", None)
+        self.qlora_config = self.extra_kwargs.pop("qlora_config", None)
+
+        validate_adapter_combo(
+            quantization_config=self.quantization_config,
+            lora_config=self.lora_config,
+            qlora_config=self.qlora_config,
+        )
 
         self.run_id = ""
         self.paths: ExperimentPaths | None = None
@@ -191,8 +202,25 @@ class BaseTrainer:
             "output_dir": result.output_dir,
             "metrics": result.metrics,
             "notes": result.notes,
+            "adapters": self._adapter_summary(),
         }
         summary_path.write_text(json.dumps(summary_payload, indent=2), encoding="utf-8")
+
+    def _config_to_dict(self, config: Any) -> dict[str, Any] | None:
+        if config is None:
+            return None
+        if hasattr(config, "to_dict"):
+            return config.to_dict()
+        if isinstance(config, dict):
+            return config
+        return {"value": str(config)}
+
+    def _adapter_summary(self) -> dict[str, Any]:
+        return {
+            "quantization": self._config_to_dict(self.quantization_config),
+            "lora": self._config_to_dict(self.lora_config),
+            "qlora": self._config_to_dict(self.qlora_config),
+        }
 
     def _handle_failure(self, exc: Exception) -> None:
         if self.paths is None or self._logger is None:
@@ -209,6 +237,7 @@ class BaseTrainer:
         assert self.paths is not None
         self.logger.info("Starting training algorithm=%s model=%s", self.algorithm, self.model)
         self.logger.info("Run directory: %s", self.paths.run_dir)
+        self.logger.info("Adapter setup: %s", self._adapter_summary())
 
         try:
             result = self._simulate_training(max_steps=max_steps, notes=notes)

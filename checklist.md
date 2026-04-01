@@ -22,6 +22,8 @@ Use this checklist while building the educational post-training library.
 
 - [ ] Replace simulated training loops with real training implementations.
 - [ ] Add tokenizer/model loading helpers.
+- [x] Add quantization boilerplate templates (8-bit and 4-bit modes).
+- [x] Add LoRA and QLoRA configuration boilerplates.
 - [ ] Add dataset schema validators for SFT, DPO, and GRPO.
 - [ ] Add checkpoint save and resume support.
 - [ ] Add evaluation hooks and metrics logging.
@@ -48,3 +50,4 @@ Use this checklist while building the educational post-training library.
 - [ ] Add inline comments and docs that explain algorithm choices.
 - [ ] Add small datasets and reproducible examples.
 - [ ] Add "from template to production" guides for each trainer.
+- [x] Add markdown guide for quantization/LoRA/QLoRA boilerplate usage.

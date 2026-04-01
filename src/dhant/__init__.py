@@ -32,6 +32,11 @@ from dhant.trainer.sft_config import SFTConfig
 from dhant.trainer.dpo_config import DPOConfig
 from dhant.trainer.grpo_config import GRPOConfig
 from dhant.trainer.reward_config import RewardConfig
+from dhant.trainer.adapters import (
+    LoRAConfigBoilerplate,
+    QLoRAConfigBoilerplate,
+    QuantizationConfigBoilerplate,
+)
 from dhant import rewards
 from dhant.cli.main import main
 
@@ -48,6 +53,9 @@ __all__ = [
     "DPOConfig",
     "GRPOConfig",
     "RewardConfig",
+    "QuantizationConfigBoilerplate",
+    "LoRAConfigBoilerplate",
+    "QLoRAConfigBoilerplate",
     # sub-packages
     "rewards",
     # cli

@@ -18,6 +18,11 @@ monitoring = [
     "tensorboard>=2.16.0",
     "tensorboardX>=2.6.2",
 ]
+adapters = [
+    "transformers>=4.50.0",
+    "peft>=0.14.0",
+    "bitsandbytes>=0.45.0",
+]
 
 [project.scripts]
 dhant = "dhant:main"
