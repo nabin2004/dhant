@@ -23,9 +23,8 @@ class SFTTrainer(BaseTrainer):
         super().__init__(model=model, train_dataset=train_dataset, output_dir=output_dir, **kwargs)
 
     def train(self, max_steps: int = 100) -> TrainingResult:
-        self._validate_inputs()
         notes = [
             "Template run only: replace _simulate_training with Transformers training loop.",
             f"epochs={self.config.num_train_epochs}, lr={self.config.learning_rate}",
         ]
-        return self._simulate_training(max_steps=max_steps, notes=notes)
+        return self._run_training(max_steps=max_steps, notes=notes)

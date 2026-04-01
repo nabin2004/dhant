@@ -43,10 +43,9 @@ class GRPOTrainer(BaseTrainer):
         return normalized
 
     def train(self, max_steps: int = 100) -> TrainingResult:
-        self._validate_inputs()
         reward_names = [getattr(func, "__name__", "anonymous_reward") for func in self.reward_funcs]
         notes = [
             "Template run only: wire rewards into trajectory generation and update steps.",
             f"group_size={self.config.group_size}, rewards={','.join(reward_names)}",
         ]
-        return self._simulate_training(max_steps=max_steps, notes=notes)
+        return self._run_training(max_steps=max_steps, notes=notes)

@@ -1,10 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from typing import Any
 
 from dhant.rewards import accuracy_reward
-from dhant.trainer import DPOTrainer, GRPOTrainer, RewardTrainer, SFTTrainer
+from dhant.trainer import (
+    DPOTrainer,
+    GRPOTrainer,
+    RewardTrainer,
+    SFTTrainer,
+    TrainingExecutionError,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -20,7 +27,10 @@ def build_parser() -> argparse.ArgumentParser:
         command_parser.add_argument("--model", required=True, help="Model identifier or local path")
         command_parser.add_argument("--dataset", required=True, help="Dataset name or path")
         command_parser.add_argument("--output_dir", default=f"outputs/{command}")
+        command_parser.add_argument("--experiment_name", default=command)
         command_parser.add_argument("--max_steps", type=int, default=100)
+        command_parser.add_argument("--disable_tensorboard", action="store_true")
+        command_parser.add_argument("--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
 
     return parser
 
@@ -37,23 +47,37 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    common_kwargs: dict[str, Any] = {
+        "output_dir": args.output_dir,
+        "experiment_name": args.experiment_name,
+        "enable_tensorboard": not args.disable_tensorboard,
+        "log_level": args.log_level,
+    }
+
     if args.command == "sft":
-        trainer = SFTTrainer(model=args.model, train_dataset=args.dataset, output_dir=args.output_dir)
+        trainer = SFTTrainer(model=args.model, train_dataset=args.dataset, **common_kwargs)
     elif args.command == "dpo":
-        trainer = DPOTrainer(model=args.model, train_dataset=args.dataset, output_dir=args.output_dir)
+        trainer = DPOTrainer(model=args.model, train_dataset=args.dataset, **common_kwargs)
     elif args.command == "grpo":
         trainer = GRPOTrainer(
             model=args.model,
             train_dataset=args.dataset,
             reward_funcs=accuracy_reward,
-            output_dir=args.output_dir,
+            **common_kwargs,
         )
     else:
-        trainer = RewardTrainer(model=args.model, train_dataset=args.dataset, output_dir=args.output_dir)
+        trainer = RewardTrainer(model=args.model, train_dataset=args.dataset, **common_kwargs)
 
-    result = trainer.train(max_steps=args.max_steps)
-    _print_result(result)
-    return 0
+    try:
+        result = trainer.train(max_steps=args.max_steps)
+        _print_result(result)
+        return 0
+    except TrainingExecutionError as exc:
+        print(f"dhant: training failed: {exc}", file=sys.stderr)
+        return 2
+    except Exception as exc:
+        print(f"dhant: unexpected error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

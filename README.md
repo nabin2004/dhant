@@ -34,6 +34,12 @@ pip install -e .
 pip install -e .[dev]
 ```
 
+### Install monitoring extras (TensorBoard)
+
+```bash
+pip install -e .[monitoring]
+```
+
 ## Quick Start
 
 ### Python API
@@ -74,6 +80,56 @@ dhant dpo --model Qwen/Qwen2.5-0.5B-Instruct --dataset argilla/Capybara-Preferen
 dhant grpo --model Qwen/Qwen2.5-0.5B-Instruct --dataset trl-lib/DeepMath-103K --output_dir outputs/grpo
 dhant reward --model Qwen/Qwen2.5-0.5B-Instruct --dataset trl-lib/ultrafeedback_binarized --output_dir outputs/reward
 ```
+
+With explicit run metadata and logging options:
+
+```bash
+dhant sft \
+	--model Qwen/Qwen2.5-0.5B \
+	--dataset trl-lib/Capybara \
+	--output_dir outputs \
+	--experiment_name capybara_sft_baseline \
+	--log_level INFO
+```
+
+Disable TensorBoard for a run:
+
+```bash
+dhant dpo --model Qwen/Qwen2.5-0.5B-Instruct --dataset argilla/Capybara-Preferences --disable_tensorboard
+```
+
+## Monitoring and Logging
+
+Each training run now gets an isolated experiment folder with logs, artifacts, and TensorBoard files:
+
+```text
+outputs/
+	experiments/
+		sft/
+			capybara_sft_baseline/
+				20260401-120501-a1b2c3d4/
+					logs/
+						train.log
+						error.log
+						traceback.log
+					tensorboard/
+					checkpoints/
+					artifacts/
+						run_summary.json
+```
+
+Start TensorBoard:
+
+```bash
+tensorboard --logdir outputs/experiments
+```
+
+## Exception Handling
+
+- Trainer failures are wrapped in `TrainingExecutionError`.
+- Full traceback is written to `logs/traceback.log` for each failed run.
+- CLI exits with non-zero status and prints a concise error summary.
+- `artifacts/run_summary.json` stores successful run metadata for reproducibility.
 
 ## Project Layout
 

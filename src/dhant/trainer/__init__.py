@@ -12,7 +12,7 @@ from dhant.trainer.grpo_trainer import GRPOTrainer
 from dhant.trainer.grpo_config import GRPOConfig
 from dhant.trainer.reward_trainer import RewardTrainer
 from dhant.trainer.reward_config import RewardConfig
-from dhant.trainer.base import BaseTrainer, TrainingResult
+from dhant.trainer.base import BaseTrainer, ExperimentPaths, TrainingExecutionError, TrainingResult
 
 __all__ = [
     "SFTTrainer",
@@ -24,5 +24,7 @@ __all__ = [
     "RewardTrainer",
     "RewardConfig",
     "BaseTrainer",
+    "ExperimentPaths",
+    "TrainingExecutionError",
     "TrainingResult",
 ]

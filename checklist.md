@@ -28,6 +28,8 @@ Use this checklist while building the educational post-training library.
 
 ## 4. Usability
 
+- [x] Add TensorBoard monitoring support for each experiment run.
+- [x] Create structured experiment directories for logs, checkpoints, and artifacts.
 - [ ] Improve CLI with config-file support.
 - [ ] Add command presets for common workflows.
 - [ ] Add helpful CLI progress messages and error handling.
@@ -39,6 +41,7 @@ Use this checklist while building the educational post-training library.
 - [ ] Add lint and formatting automation.
 - [ ] Add CI workflow for tests and lint.
 - [ ] Add release checklist and semantic versioning workflow.
+- [x] Add robust exception handling with per-run traceback logs.
 
 ## 6. Educational Focus
 
