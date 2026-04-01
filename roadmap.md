@@ -98,3 +98,7 @@ Success criteria:
 2. Add dataset adapters and schema validation utilities.
 3. Add an examples folder with one script per trainer.
 4. Add CI for tests and static checks.
+
+## Research References
+
+- See `papers.md` for trainer-to-paper mapping with arXiv links and learning notes.

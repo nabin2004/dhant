@@ -14,6 +14,7 @@ Use this checklist while building the educational post-training library.
 
 - [x] Write a clear project `README.md` with install and quickstart instructions.
 - [x] Add `roadmap.md` with milestones.
+- [x] Add `papers.md` mapping trainers to core papers (title, arXiv, explanation).
 - [ ] Add API reference docs for each trainer config and class.
 - [ ] Add architecture notes for data flow and trainer lifecycle.
 
