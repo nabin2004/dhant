@@ -1,0 +1,23 @@
+[project]
+name = "dhant"
+version = "0.1.0"
+description = "Educational post-training library template for SFT, DPO, GRPO, and Reward modeling"
+readme = "README.md"
+authors = [
+    { name = "nabin2004", email = "olinabin2004@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "ruff>=0.11.0",
+]
+
+[project.scripts]
+dhant = "dhant:main"
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
